@@ -152,6 +152,11 @@ def assemble_context(state: AgentState) -> AgentState:
         )
 
     context_str = "\n".join(context_parts)
+
+    gender = state.get("extracted_filters", {}).get("gender")
+    if gender:
+        context_str = f"[USER REQUESTED GENDER: {gender}]\n\n{context_str}"
+
     reasoning.append(f"Assembled context from {len(products)} products")
 
     return {

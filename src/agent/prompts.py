@@ -31,6 +31,7 @@ Query: {query}
 - max_price: number or null
 - source: "h&m" or "myntra" or null
 - occasion: the occasion or null
+- gender: "men" or "women" or null (infer from context like "female", "girl", "him", "her", etc.)
 
 Reply in EXACTLY this format (no extra text):
 PRODUCT: <your hypothetical product description>
@@ -48,6 +49,7 @@ Rules:
 2. Consider color coordination, style matching, and occasion appropriateness
 3. Try to include both a top and a bottom if available
 4. Explain WHY these pieces work together
+5. GENDER MATCH: Pay attention to gendered terms in product names (e.g. "Men", "Women"). If the user asks for women's/female clothing and only men's items are available (or vice versa), acknowledge this in the stylist_note and recommend the closest match while noting the mismatch. Do NOT silently recommend the wrong gender.
 
 Return your response as JSON with this exact format:
 {{
