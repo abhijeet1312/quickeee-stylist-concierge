@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.env
+.venv/
+venv/
+.planning/
+*.egg
+.pytest_cache/
+.claude/
+claude.exe
+data/debug_*
+data/myntra_api_*
+data/myntra_raw.json
+docs/superpowers/

@@ -1,0 +1,37 @@
+# Scraping
+playwright==1.52.0
+
+# Embeddings & Reranking
+sentence-transformers==3.4.1
+torch>=2.0.0
+
+# Vector DB
+chromadb==1.0.7
+
+# BM25
+rank-bm25==0.2.2
+
+# Document Store
+# sqlite3 is built-in
+
+# LLM
+groq==0.25.0
+
+# Agentic Framework
+langgraph==0.4.1
+langchain-core==0.3.63
+langchain-groq==0.3.2
+langchain-text-splitters==0.3.8
+
+# API
+fastapi==0.115.12
+uvicorn==0.34.2
+
+# Utils
+pydantic==2.11.3
+python-dotenv==1.1.0
+httpx==0.28.1
+
+# Testing
+pytest==8.3.5
+pytest-asyncio==0.26.0

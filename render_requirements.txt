@@ -1,0 +1,12 @@
+# Render deployment - lightweight (no local ML models)
+fastapi==0.115.12
+uvicorn==0.34.2
+pydantic==2.11.3
+python-dotenv==1.1.0
+requests>=2.31.0
+groq==0.25.0
+langgraph==0.4.1
+langchain-core==0.3.63
+langchain-text-splitters==0.3.8
+chromadb==1.0.7
+rank-bm25==0.2.2
