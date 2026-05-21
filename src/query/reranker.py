@@ -1,7 +1,7 @@
 import time
 import requests as req_lib
 
-from src.config import RERANKER_MODEL, RERANK_TOP_K, HF_API_TOKEN, USE_HF_API
+from src.config import RERANKER_MODEL, RERANK_TOP_K, HF_API_TOKEN, RERANKER_MODE
 
 HF_RERANKER_URL = f"https://api-inference.huggingface.co/models/{RERANKER_MODEL}"
 
@@ -11,8 +11,6 @@ _hf_session: req_lib.Session | None = None
 
 def _get_reranker():
     global _reranker
-    if USE_HF_API:
-        return None
     if _reranker is None:
         from sentence_transformers import CrossEncoder
         print(f"[Reranker] Loading {RERANKER_MODEL} locally...")
@@ -67,9 +65,13 @@ def rerank(query: str, candidates: list[dict], top_k: int = RERANK_TOP_K) -> lis
     if not candidates:
         return []
 
+    if RERANKER_MODE == "skip":
+        print("[Reranker] Skip mode - returning candidates by search order")
+        return candidates[:top_k]
+
     texts = [c["text"] for c in candidates]
 
-    if USE_HF_API:
+    if RERANKER_MODE == "api":
         try:
             scores = _api_rerank(query, texts)
         except Exception as e:

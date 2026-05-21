@@ -31,8 +31,9 @@ EMBEDDING_MODE = os.getenv("EMBEDDING_MODE", "onnx" if not HF_API_TOKEN else "ap
 EMBEDDING_MODEL = "BAAI/bge-m3"
 EMBEDDING_DIM = 384 if EMBEDDING_MODE == "onnx" else 1024
 
-# Reranker
+# Reranker mode: "api" (HF Inference), "local" (sentence-transformers), "skip" (no reranking)
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"
+RERANKER_MODE = os.getenv("RERANKER_MODE", "api" if HF_API_TOKEN else ("skip" if EMBEDDING_MODE == "onnx" else "local"))
 
 # Chunking
 CHUNK_SIZE = 512
