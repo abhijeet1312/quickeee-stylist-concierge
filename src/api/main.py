@@ -1,8 +1,11 @@
 import json
 import time
+from pathlib import Path
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from src.api.schemas import StyleRequest, StyleResponse
 from src.agent.graph import create_agent
@@ -110,11 +113,17 @@ async def style_me(request: StyleRequest):
     )
 
 
+STATIC_DIR = Path(__file__).parent / "static"
+
+
 @app.get("/")
 async def root():
-    return {"service": "Quickeee Luxury Stylist Concierge", "status": "ok"}
+    return FileResponse(STATIC_DIR / "index.html")
 
 
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
