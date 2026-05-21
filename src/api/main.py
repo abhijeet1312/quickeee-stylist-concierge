@@ -90,7 +90,11 @@ async def style_me(request: StyleRequest):
         "cached_response": None,
     }
 
-    result = _agent.invoke(initial_state)
+    try:
+        result = _agent.invoke(initial_state)
+    except Exception as e:
+        print(f"[API] ERROR in agent: {type(e).__name__}: {e}")
+        raise HTTPException(status_code=500, detail=f"Agent error: {type(e).__name__}: {str(e)}")
 
     elapsed = time.time() - start_time
     print(f"[API] Response generated in {elapsed:.2f}s")
@@ -104,6 +108,11 @@ async def style_me(request: StyleRequest):
         stylist_note=response.get("stylist_note", ""),
         agent_reasoning=response.get("agent_reasoning", []),
     )
+
+
+@app.get("/")
+async def root():
+    return {"service": "Quickeee Luxury Stylist Concierge", "status": "ok"}
 
 
 @app.get("/health")

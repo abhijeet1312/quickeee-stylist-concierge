@@ -50,7 +50,7 @@ def run_ingestion(products: list[Product] | None = None) -> tuple[VectorStore, D
         all_chunks.extend(chunks)
     print(f"[Pipeline] Created {len(all_chunks)} chunks from {len(products)} products")
 
-    print("[Pipeline] Embedding with BGE-M3...")
+    print(f"[Pipeline] Embedding ({embedder.mode} mode)...")
     embedder = Embedder()
     texts = [chunk["text"] for chunk in all_chunks]
     embeddings = embedder.embed_texts(texts)

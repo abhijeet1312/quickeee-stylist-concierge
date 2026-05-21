@@ -23,9 +23,13 @@ GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 HF_API_TOKEN = os.getenv("HF_API_TOKEN", "")
 USE_HF_API = bool(HF_API_TOKEN)
 
+# Embedding mode: "onnx" (local, no API), "api" (HF Inference), "local" (sentence-transformers)
+# On Render free tier, use "onnx" to avoid external API calls for embeddings
+EMBEDDING_MODE = os.getenv("EMBEDDING_MODE", "onnx" if not HF_API_TOKEN else "api")
+
 # Embedding
 EMBEDDING_MODEL = "BAAI/bge-m3"
-EMBEDDING_DIM = 1024
+EMBEDDING_DIM = 384 if EMBEDDING_MODE == "onnx" else 1024
 
 # Reranker
 RERANKER_MODEL = "BAAI/bge-reranker-v2-m3"

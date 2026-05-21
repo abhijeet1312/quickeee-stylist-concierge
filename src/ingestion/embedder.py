@@ -2,7 +2,7 @@ import math
 import time
 import requests as req_lib
 
-from src.config import EMBEDDING_MODEL, EMBEDDING_DIM, HF_API_TOKEN, USE_HF_API
+from src.config import EMBEDDING_MODEL, EMBEDDING_DIM, HF_API_TOKEN, USE_HF_API, EMBEDDING_MODE
 
 HF_API_URL = f"https://api-inference.huggingface.co/models/{EMBEDDING_MODEL}"
 
@@ -10,9 +10,13 @@ HF_API_URL = f"https://api-inference.huggingface.co/models/{EMBEDDING_MODEL}"
 class Embedder:
     def __init__(self, model_name: str = EMBEDDING_MODEL):
         self.model_name = model_name
-        self.use_api = USE_HF_API
+        self.mode = EMBEDDING_MODE
 
-        if self.use_api:
+        if self.mode == "onnx":
+            from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
+            self._onnx_ef = DefaultEmbeddingFunction()
+            print(f"[Embedder] Using local ONNX (all-MiniLM-L6-v2, {EMBEDDING_DIM}d)")
+        elif self.mode == "api":
             self._headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
             self._session = req_lib.Session()
             print(f"[Embedder] Using HuggingFace Inference API for {model_name}")
@@ -47,7 +51,16 @@ class Embedder:
         return [x / norm for x in vec]
 
     def embed_texts(self, texts: list[str], batch_size: int = 32) -> list[list[float]]:
-        if self.use_api:
+        if self.mode == "onnx":
+            all_embeddings = []
+            for i in range(0, len(texts), batch_size):
+                batch = texts[i:i + batch_size]
+                embeddings = self._onnx_ef(batch)
+                all_embeddings.extend([self._normalize(list(e)) for e in embeddings])
+                if i + batch_size < len(texts):
+                    print(f"[Embedder] Embedded {i + len(batch)}/{len(texts)}")
+            return all_embeddings
+        elif self.mode == "api":
             all_embeddings = []
             for i in range(0, len(texts), batch_size):
                 batch = texts[i:i + batch_size]
@@ -66,7 +79,10 @@ class Embedder:
             return embeddings.tolist()
 
     def embed_query(self, query: str) -> list[float]:
-        if self.use_api:
+        if self.mode == "onnx":
+            result = self._onnx_ef([query])
+            return self._normalize(list(result[0]))
+        elif self.mode == "api":
             result = self._api_embed([query])
             return self._normalize(result[0])
         else:

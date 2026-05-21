@@ -70,7 +70,11 @@ def rerank(query: str, candidates: list[dict], top_k: int = RERANK_TOP_K) -> lis
     texts = [c["text"] for c in candidates]
 
     if USE_HF_API:
-        scores = _api_rerank(query, texts)
+        try:
+            scores = _api_rerank(query, texts)
+        except Exception as e:
+            print(f"[Reranker] API failed ({type(e).__name__}), skipping rerank")
+            return candidates[:top_k]
     else:
         reranker = _get_reranker()
         pairs = [(query, t) for t in texts]
