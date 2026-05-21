@@ -1,5 +1,5 @@
 # Render deployment - lightweight (no local ML models)
-fastapi==0.115.12
+fastapi==0.115.9
 uvicorn==0.34.2
 pydantic==2.11.3
 python-dotenv==1.1.0
