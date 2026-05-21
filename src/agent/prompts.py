@@ -19,6 +19,23 @@ Extract these fields if mentioned (use null if not mentioned):
 
 JSON:"""
 
+COMBINED_REWRITE_PROMPT = """You are a fashion product search assistant. Do TWO things for this query:
+
+Query: {query}
+
+1. HYPOTHETICAL PRODUCT: Write a 2-sentence product description for the ideal item the user wants. Focus on material, color, style, occasion.
+
+2. FILTERS: Extract structured filters as JSON with these fields (null if not mentioned):
+- category: "tops" or "bottoms" or null
+- color: the color or null
+- max_price: number or null
+- source: "h&m" or "myntra" or null
+- occasion: the occasion or null
+
+Reply in EXACTLY this format (no extra text):
+PRODUCT: <your hypothetical product description>
+FILTERS: <json object>"""
+
 FASHION_MATCHER_PROMPT = """You are a luxury fashion stylist for Quickeee. Given a user's request and a set of available clothing items, recommend the best outfit combination.
 
 User request: {query}

@@ -18,6 +18,7 @@ CHROMA_DIR.mkdir(parents=True, exist_ok=True)
 # Groq
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+GROQ_FAST_MODEL = os.getenv("GROQ_FAST_MODEL", "llama-3.1-8b-instant")
 
 # HuggingFace Inference API (for cloud deployment)
 HF_API_TOKEN = os.getenv("HF_API_TOKEN", "")

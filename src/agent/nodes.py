@@ -1,6 +1,6 @@
 import json
 from src.agent.state import AgentState
-from src.query.rewriter import rewrite_query_hyde, extract_filters
+from src.query.rewriter import rewrite_and_extract
 from src.query.hybrid_search import hybrid_search
 from src.query.reranker import rerank
 from src.query.cache import SemanticCache
@@ -61,10 +61,8 @@ def rewrite_query(state: AgentState) -> AgentState:
     query = state["user_query"]
     reasoning = list(state.get("agent_reasoning", []))
 
-    rewritten = rewrite_query_hyde(query)
+    rewritten, filters = rewrite_and_extract(query)
     reasoning.append(f"Rewrote query using HyDE: '{rewritten[:100]}...'")
-
-    filters = extract_filters(query)
     reasoning.append(f"Extracted filters: {filters}")
 
     return {
