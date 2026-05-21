@@ -44,11 +44,11 @@ class Embedder:
         resp.raise_for_status()
         return resp.json()
 
-    def _normalize(self, vec: list[float]) -> list[float]:
-        norm = math.sqrt(sum(x * x for x in vec))
+    def _normalize(self, vec: list) -> list[float]:
+        norm = math.sqrt(sum(float(x) * float(x) for x in vec))
         if norm == 0:
-            return vec
-        return [x / norm for x in vec]
+            return [float(x) for x in vec]
+        return [float(x) / norm for x in vec]
 
     def embed_texts(self, texts: list[str], batch_size: int = 32) -> list[list[float]]:
         if self.mode == "onnx":
