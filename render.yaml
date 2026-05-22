@@ -13,3 +13,5 @@ services:
         value: onnx
       - key: PYTHON_VERSION
         value: "3.10.14"
+      - key: PYTHONUNBUFFERED
+        value: "1"

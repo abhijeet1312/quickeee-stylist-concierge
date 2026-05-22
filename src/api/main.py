@@ -24,10 +24,14 @@ _agent = None
 async def lifespan(app: FastAPI):
     global _agent
 
-    print("[API] Initializing stores...")
+    import sys
+    print("[API] Initializing stores...", flush=True)
     embedder = Embedder()
+    print("[API] Embedder ready", flush=True)
     vector_store = VectorStore()
+    print("[API] VectorStore ready", flush=True)
     doc_store = DocumentStore()
+    print("[API] DocumentStore ready", flush=True)
 
     bm25_store = BM25Store()
     all_products = doc_store.get_all_products()
@@ -39,9 +43,9 @@ async def lifespan(app: FastAPI):
                 for p in all_products
             ],
         )
-        print(f"[API] BM25 index built with {len(all_products)} products")
+        print(f"[API] BM25 index built with {len(all_products)} products", flush=True)
     else:
-        print("[API] WARNING: No products in database. Run ingestion first.")
+        print("[API] WARNING: No products in database. Run ingestion first.", flush=True)
 
     cache = SemanticCache()
 
@@ -53,9 +57,9 @@ async def lifespan(app: FastAPI):
         cache=cache,
     )
 
-    print("[API] Agent ready!")
+    print("[API] Agent ready!", flush=True)
     yield
-    print("[API] Shutting down...")
+    print("[API] Shutting down...", flush=True)
 
 
 app = FastAPI(
