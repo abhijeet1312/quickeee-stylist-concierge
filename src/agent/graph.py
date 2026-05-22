@@ -21,9 +21,11 @@ def should_use_cache(state: AgentState) -> str:
 
 def return_cached(state: AgentState) -> AgentState:
     import json
+    response = json.loads(state["cached_response"])
+    response["agent_reasoning"] = ["Cache HIT - returning cached response (0 LLM calls, 0 tokens used)"]
     return {
         **state,
-        "response": json.loads(state["cached_response"]),
+        "response": response,
     }
 
 
